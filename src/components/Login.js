@@ -6,9 +6,11 @@ import { checkName, checkValidData } from "../utils/validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  updateProfile
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -17,6 +19,7 @@ const Login = () => {
   const password = useRef(null);
   const name = useRef(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const toggleSignUpForm = () => {
     setIsSignIn(!isSignIn);
@@ -38,6 +41,7 @@ const Login = () => {
     // Sign In and Sign Up Logic below
     if (!isSignIn) {
       // Sign Up Logic
+      // creates new user with email and password
       createUserWithEmailAndPassword(
         auth,
         email.current.value,
@@ -48,18 +52,27 @@ const Login = () => {
           const user = userCredential.user;
           // to update user name after user has successfully signed in / signed up
           updateProfile(user, {
-            displayName: name.current.value, photoURL: "https://example.com/jane-q-user/profile.jpg"
-          }).then(() => {
-            // Profile updated!
-            // after user is successfully registered, navigate to browse component
-            navigate("/browse")
-          }).catch((error) => {
-            // An error occurred
-            setErrorMessage(error.message)
-          });
-          console.log(user);
-          navigate("/browse")
-
+            displayName: name.current.value,
+            photoURL:
+              "https://media.licdn.com/dms/image/v2/D5635AQEGK70SPzBZxQ/profile-framedphoto-shrink_200_200/profile-framedphoto-shrink_200_200/0/1689078018142?e=1725368400&v=beta&t=MJjcLDpDo_47LTkspF32kOioBW1Wi31sM54wn6IWe_o",
+          })
+            .then(() => {
+              // Profile updated! and user details are dispatched to the redux store
+              // after user is successfully registered, navigate to browse component
+              const { uid, email, displayName, photoURL } = auth.currentUser;
+              dispatch(
+                addUser({
+                  uid: uid,
+                  email: email,
+                  displayName: displayName,
+                  photoURL: photoURL,
+                })
+              );
+            })
+            .catch((error) => {
+              // An error occurred
+              setErrorMessage(error.message);
+            });
           // ...
         })
         .catch((error) => {
@@ -71,17 +84,21 @@ const Login = () => {
         });
     } else {
       // Sign In Logic
-      signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+      // signs in with existing email and password
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
         .then((userCredential) => {
           // if Signed in
           const user = userCredential.user;
-          console.log(user)
-          navigate("/browse") // navigate to browse page
+          console.log(user);
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          setErrorMessage(errorCode + "-" + errorMessage)
+          setErrorMessage(errorCode + "-" + errorMessage);
         });
     }
   };

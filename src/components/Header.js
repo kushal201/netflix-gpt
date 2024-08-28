@@ -24,7 +24,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const { uid, email, displayName, photoURL } = user;
         dispatch(
@@ -42,7 +42,9 @@ const Header = () => {
         navigate("/");
       }
     });
-  }, []);
+    return () => unsubscribe();
+  }, [dispatch, navigate]);
+
   return (
     <div className="flex justify-between z-10 w-full absolute px-8 py-2 bg-gradient-to-b from-black">
       <img className="w-44" src={LOGO} alt="LOGO"></img>

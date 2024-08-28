@@ -12,6 +12,7 @@
 - Setup Authentication using "signInWithEmailAndPassword" and "createUserWithEmailAndPassword" APIs
 - Created Redux Store
 - To get current signed is user's details, "onAuthStateChanged" API is used
+- Unsubscribed to onAuthStateChanged whenever Headed component unmounts
 
 Bug Fixes:
 

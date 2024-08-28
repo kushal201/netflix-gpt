@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
-import { BACKGROUND } from "../utils/constants";
+import { BACKGROUND, USER_ICON } from "../utils/constants";
 import { checkName, checkValidData } from "../utils/validate";
 import {
   createUserWithEmailAndPassword,
@@ -53,8 +53,7 @@ const Login = () => {
           // to update user name after user has successfully signed in / signed up
           updateProfile(user, {
             displayName: name.current.value,
-            photoURL:
-              "https://media.licdn.com/dms/image/v2/D5635AQEGK70SPzBZxQ/profile-framedphoto-shrink_200_200/profile-framedphoto-shrink_200_200/0/1689078018142?e=1725368400&v=beta&t=MJjcLDpDo_47LTkspF32kOioBW1Wi31sM54wn6IWe_o",
+            photoURL: USER_ICON,
           })
             .then(() => {
               // Profile updated! and user details are dispatched to the redux store
@@ -133,7 +132,7 @@ const Login = () => {
         <input
           ref={password}
           className="p-4 my-2 w-full bg-gray-700 text-white rounded-md"
-          type="text"
+          type="password"
           placeholder="Password"
         ></input>
         <p className="p-2 font-bold text-lg text-red-500">{errorMessage}</p>

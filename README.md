@@ -14,6 +14,17 @@
 - To get current signed is user's details, "onAuthStateChanged" API is used
 - Unsubscribed to onAuthStateChanged whenever Headed component unmounts
 
+- Created Tmdb account for generating API key and for using Tmdb API in our application
+- while calling API, it calls the API twice. React does it to ensure there are no inconsistencies
+- Created redux slice for movie list and also the reducers
+- used custom hook to call the API and to get main movie trailer
+- updated store with trailer video data
+- embedded YouTube video using its iframe and used autoplay and muted it
+- used Tailwind CSS on MainContainer component for making it visually appealing
+- created SecondaryContainer component to render the MovieList component
+- called the "now playing" API from TMDB to render the list of movies
+- used Tailwind CSS on the list to handle overflow
+
 Bug Fixes:
 
 - user name not displayed first time when signed up
